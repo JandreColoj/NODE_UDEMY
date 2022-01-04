@@ -11,7 +11,7 @@ hbs.registerPartials(__dirname + '/views/partials', function (err) {});
 
 app.get('/', (req, res) => {
    res.render('home', {
-      nombre : "Jose Andre",
+      nombre : "Jose y Kary",
       ciudad : "Guatemala",
    });
 });
@@ -31,6 +31,7 @@ app.get('/elements', (req, res) => {
       ciudad : "Guatemala",
    });
 });
+
 
 app.use((req, res, next) =>{
    res.status(404).sendFile(__dirname+'/public/404.html');
