@@ -1,40 +1,84 @@
 const { response } = require('express');
+const User = require('../models/user');
+const bcrypt = require('bcryptjs'); 
 
-const listUsers = (req, res = response ) => {
 
-   // const params = req.query;
-   const {country, ciudad = 'N/A'} = req.query;
-
+//List user with paginate
+const listUsers = async(req, res = response ) => {
  
-   res.status(200).json({
-      'access' : 'success controller',
-      'pais' : country,
-      'ciudad' : ciudad,
+   const {limit = 5, page = 1} = req.query;
+
+   const query = {status:true};
+
+   // const users = await User.find(query)
+   //                         .skip((Number(page)-1)*Number(limit))
+   //                         .limit(Number(limit));
+
+   // const total = await User.countDocuments(query);
+
+
+   const [total, users] = await Promise.all([
+
+      User.countDocuments(query),
+
+      User.find(query)
+         .skip((Number(page)-1)*Number(limit))
+         .limit(Number(limit))
+
+   ]);
+
+   res.status(200).json({  
+      users,
+      total,
    });
 }
 
-const createUser = (req, res = response ) => {
+const createUser = async (req, res = response ) => {
 
-   const request = req.body;
+   const {name, email, password, rol} = req.body;
+
+   const user = new User({name, email, password, rol});
+
+   const salt = bcrypt.genSaltSync(10); 
+   user.password = bcrypt.hashSync(password, salt);
+
+   await user.save();
 
    res.status(200).json({
-      'name' : (request.name)
+      'data' :  user
    });
 }
 
-const updateUser = (req, res = response) => {
+const updateUser = async (req, res = response) => {
 
    const id_user = req.params.id;
 
+   const {_id, password, email, ... body} = req.body;
+ 
+   if(password){
+      const salt = bcrypt.genSaltSync(10); 
+      body.password = bcrypt.hashSync(password, salt);
+   }
+ 
+   const user = await User.findByIdAndUpdate(id_user, body);
+
    res.status(200).json({
-      'id_user' : id_user
+      'user' : user,
+      'message' : 'user updated' 
    });
 }
 
-const deleteUser = (req, res = response ) => {
+const deleteUser = async (req, res = response ) => {
+
+   const id_user = req.params.id;
+ 
+   const user = await User.findByIdAndUpdate(id_user, {status:false});
+
    res.status(200).json({
-      'access' : 'success deleteUser'
+      'user' : user,
+      'message' : 'user delete ' 
    });
+    
 }
 
 
