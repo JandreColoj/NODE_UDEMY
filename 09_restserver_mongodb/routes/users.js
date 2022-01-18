@@ -2,9 +2,9 @@ const { Router } = require('express');
 const { listUsers, createUser, updateUser, deleteUser } = require('../controllers/userController');
 const { body, validationResult, check } = require('express-validator');
 
-const { validateData } = require('../middleware/validate-data');
-const { rolValid, emailExist, existUser } = require('../helpers/db-validators');
+const {validateData, validateJWT, isAmdin, rolAuth } = require('../middleware/index');
 
+const { rolValid, emailExist, existUser } = require('../helpers/db-validators');
 
 const router = Router();
 
@@ -29,6 +29,9 @@ router.put('/:id',[
 ],updateUser);
 
 router.delete('/:id',[
+   validateJWT,
+   // isAmdin,
+   rolAuth(['admin', 'user', 'operativo']),
    check('id', 'no es id valid').isMongoId(),
    check('id').custom(existUser),
    validateData
