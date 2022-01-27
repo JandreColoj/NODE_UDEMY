@@ -1,7 +1,9 @@
 const bcryptjs = require('bcryptjs');
 const { response } = require('express');
 const User = require('../models/user');  
+
 const { generateJWT } = require('../helpers/generateJWT');  
+const { googleVerify } = require('../helpers/google-verify');  
 
  
 const login = async (req, res = response ) => {
@@ -51,6 +53,61 @@ const login = async (req, res = response ) => {
 
 }
 
+
+const login_google = async(req, res = response) => {
+
+   const { id_token } = req.body;
+ 
+   try {
+      
+      const {name, picture, email} = await googleVerify(id_token);
+
+
+      let user = await User.findOne({email});
+      
+      if(!user){
+
+         const data = {
+            name, 
+            email,
+            password : '',
+            image :  picture,
+            google: true
+         };
+
+         user = new User(data);
+
+         await user.save();
+      }
+
+
+      if(!user.status){
+
+         res.status(401).json({ 
+            message: 'Contacte a soporte'
+         });
+
+      }
+
+      const token = await generateJWT(user.id);
+      
+      res.json({
+         token: token,
+         user : user
+      });
+
+   } catch (error) {
+
+      res.status(400).json({ 
+         message_error: 'error al validar el token'
+      });
+
+   }
+
+
+}
+
 module.exports = { 
-   'login' : login
+   'login' : login,
+   'login_google' : login_google
 }
