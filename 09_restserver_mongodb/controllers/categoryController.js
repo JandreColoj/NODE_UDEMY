@@ -2,14 +2,7 @@ const { response } = require('express');
 
 const {Category} = require('../models/index');
 
-
-//obtener categoria - populate
-
-//actualizar categoria
-
 //borrar categoria
-
-//crate middleware, verifica id category
 
 const listCategories = async (req, res = response) =>{
 
@@ -90,8 +83,50 @@ const createCategory = async (req, res = response) =>{
 }
  
 
+const updateCategory = async (req, res = response) =>{
+
+   const id_category = req.params.id;
+
+   const name = req.body.name;
+ 
+   const data = {
+      'name' : name.toUpperCase(), 
+      'user' : req.userAuth._id,
+   }
+ 
+   const category = await Category.findByIdAndUpdate(id_category, data, {new: true});
+
+   res.status(200).json({
+      'category' : category,
+      'message' : 'category updated' 
+   });
+
+}
+
+
+const deleteCategory = async (req, res = response) =>{
+
+   const id_category = req.params.id;
+ 
+   const data = {
+      'status' : false, 
+      'user'   : req.userAuth._id,
+   }
+ 
+   const category = await Category.findByIdAndUpdate(id_category, data, {new: true});
+
+   res.status(200).json({
+      'category' : category,
+      'message' : 'category delete' 
+   });
+
+}
+
+
 module.exports = {
    listCategories : listCategories,
    createCategory : createCategory,
-   getCategory    : getCategory
+   getCategory    : getCategory,
+   updateCategory : updateCategory,
+   deleteCategory : deleteCategory
 }
