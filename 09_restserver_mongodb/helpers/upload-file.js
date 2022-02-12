@@ -6,8 +6,8 @@ const upload_file = (files, ext_permitible = ['png', 'jpg', 'txt', 'jpeg', 'gif'
 
    return new Promise((resolve, reject)=>{
 
-      const { archivo } = files;
-
+      const { archivo } = files; 
+ 
       const name_first = archivo.name.split('.');
       const ext = name_first[name_first.length-1];
 
@@ -25,7 +25,7 @@ const upload_file = (files, ext_permitible = ['png', 'jpg', 'txt', 'jpeg', 'gif'
             return reject(err); 
          }
 
-         resolve(uploadPath); 
+         resolve(name_file); 
       });
 
    });

@@ -50,11 +50,22 @@ const existProduct = async (id) => {
    }
 }
 
+const collection_valid = (collection ='', collections = []) => {
+      
+   const incluid = collections.includes(collection);
+
+   if(!incluid){
+      throw new Error(`la collecion ${collection} no espermitida`);
+   }
+
+   return true;  
+}
 
 module.exports = {
-   rolValid      : rolValid,
-   emailExist    : emailExist,
-   existUser     : existUser,
-   existCategory : existCategory,
-   existProduct  : existProduct
+   rolValid         : rolValid,
+   emailExist       : emailExist,
+   existUser        : existUser,
+   existCategory    : existCategory,
+   existProduct     : existProduct,
+   collection_valid : collection_valid
 }

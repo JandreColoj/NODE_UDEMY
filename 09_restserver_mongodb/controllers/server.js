@@ -21,7 +21,7 @@ class Server{
       }; 
 
       //conect db
-      // this.conectDB();
+      this.conectDB();
 
       //Middleware
       this.middlewares();
