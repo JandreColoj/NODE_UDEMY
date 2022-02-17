@@ -107,7 +107,22 @@ const login_google = async(req, res = response) => {
 
 }
 
+const validarToken = async (req, res = response ) => {
+
+   const {userAuth} = req;
+
+   const token = await generateJWT(userAuth.id);
+
+   res.json({
+      userAuth,
+      token
+   })
+
+}
+
+
 module.exports = { 
    'login' : login,
-   'login_google' : login_google
+   'login_google' : login_google,
+   validarToken : validarToken
 }

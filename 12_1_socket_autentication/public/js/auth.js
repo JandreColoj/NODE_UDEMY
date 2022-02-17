@@ -23,15 +23,23 @@ form.addEventListener('submit', ev =>{
       body : JSON.stringify(form_data),
       headers : {'Content-Type' : 'application/json'},
    })
-   .then(res => resp.json())
-   .then(data => {
+   .then(resp => resp.json())
+   .then(({message, token}) => {
 
-      console.log(data);
+      if (message) {
+         console.log(message); 
+
+         localStorage.setItem('token', token);
+
+         window.location = 'chat.html';
+         console.log(token);    
+      }
+
    })
    .catch(err =>{
       console.log(err);
    })
-   console.log(form_data);
+   
 });
 
 

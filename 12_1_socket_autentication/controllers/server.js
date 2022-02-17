@@ -34,6 +34,9 @@ class Server{
       
       //route
       this.routes();
+
+      //sockets
+      this.sockets();
    }
 
 
@@ -64,6 +67,13 @@ class Server{
       this.app. use(this.paths.product, require('../routes/product'));
       this.app. use(this.paths.search, require('../routes/search'));
       this.app. use(this.paths.upload, require('../routes/upload'));
+   }
+
+
+   sockets(){
+ 
+      this.io.on("connection", (socket) => socketController(socket, this.io));
+
    }
 
    listen(){
