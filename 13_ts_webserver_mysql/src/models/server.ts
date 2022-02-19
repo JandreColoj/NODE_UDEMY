@@ -1,7 +1,10 @@
 import express, { Application } from 'express';
+import cors from 'cors';
 
 import userRouter from '../routes/userRoutes';
-import cors from 'cors';
+ 
+import db from '../db/connection';
+
 
 export class example{}
 
@@ -18,9 +21,26 @@ class Server{
       this.app = express();
       this.port = process.env.PORT || '3000';
 
+      this.dbConnection();
+
       this.middlewares();
 
       this.routes();
+   }
+
+
+   async dbConnection(){
+      
+      try{
+         
+         await db.authenticate();
+
+         console.log('data base online');
+         
+      }catch (error:any) {
+         throw new Error(error);
+      }
+
    }
 
    middlewares(){
@@ -33,6 +53,8 @@ class Server{
 
       //Carpeta publica
       this.app.use(express.static('public'));
+
+
    }
 
    routes(){
@@ -42,7 +64,7 @@ class Server{
    listen(){
 
       this.app.listen(this.port, () => {
-         console.log(`Listening at http://localhost:${this.port}`)
+         console.log(`npm i mysql2Listening at http://localhost:${this.port}`)
        })
        
    }

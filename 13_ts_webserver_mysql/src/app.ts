@@ -1,8 +1,11 @@
 import dotenv from 'dotenv';
-import Server from './models/server';
-
 //configurar dotenv
 dotenv.config();
+
+import Server from './models/server';
+
+console.log('puerto---',process.env.PORT);
+
 
 const server = new Server();
 
