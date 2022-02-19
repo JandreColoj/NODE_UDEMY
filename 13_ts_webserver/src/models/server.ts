@@ -42,7 +42,7 @@ class Server{
    listen(){
 
       this.app.listen(this.port, () => {
-         console.log(`--Listening at http://localhost:${this.port}`)
+         console.log(`Listening at http://localhost:${this.port}`)
        })
        
    }

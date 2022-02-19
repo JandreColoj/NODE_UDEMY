@@ -3,6 +3,12 @@ import { Response } from "express";
 
 export const getusers = (req: Request, res: Response) =>{
 
+ 
+
+   console.log(process.env.PORT);
+   console.log('quer api');
+
+
    res.json({
       message:'getUsers'
    });
